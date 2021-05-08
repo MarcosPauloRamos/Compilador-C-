@@ -15,7 +15,7 @@
 /* set NO_CODE to TRUE to get a compiler that does not
  * generate code
  */
-#define NO_CODE TRUE
+#define NO_CODE FALSE
 
 #include "util.h"
 #if NO_PARSE
@@ -31,69 +31,83 @@
 #endif
 
 /* allocate global variables */
-int lineno = 0;
+extern int check_return;
+int lineno = 1;
+int init_code;
 FILE * source;
 FILE * listing;
-FILE * code;
 
 /* allocate and set tracing flags */
-int EchoSource = FALSE;
-int TraceScan = FALSE;
-int TraceParse = TRUE;
-int TraceAnalyze = TRUE;
-int TraceCode = FALSE;
+FlagType TraceScan = FALSE; // Imprimir tokens
+FlagType TraceParse = FALSE; // Imprimir árvore sintática
+FlagType TraceAnalyze = FALSE; // Imprimir tabela de simbolos
+FlagType TraceCode = FALSE; // Imprimir nós da geração de código
+FlagType PrintCode = FALSE; // Imprimir os códigos gerados
+FlagType CreateFiles = FALSE; // Criar arquivos de compilação
+FlagType Error = FALSE; // Flag que marca a existência de erros
+FlagType SO; // Indica se a compilação é de um SO
 
-int Error = FALSE;
 
-int main( int argc, char * argv[] )
-{ TreeNode * syntaxTree;
-  char pgm[120]; /* source code file name */
-  if (argc != 2)
-    { fprintf(stderr,"usage: %s <filename>\n",argv[0]);
-      exit(1);
-    }
+int main( int argc, char * argv[] ) {
+  char pgm[120]; /* nome do arquivo do código fonte */
+  char path[120];
+
+  if (argc < 3) {
+    fprintf(stderr,N_VERM"Arquivo não especificado.\nUso: %s <nome do arquivo> <flag>\n"RESET,argv[0]);
+    exit(-1);
+  }
+  
+  if(strcmp(argv[2],"-so") == 0){
+    init_code = 0;
+    SO = TRUE;
+  }else{
+    init_code = atoi(argv[2]);
+    SO = FALSE;
+  }
+  
+  strcpy(path,"codigos/");
   strcpy(pgm,argv[1]) ;
   if (strchr (pgm, '.') == NULL)
-     strcat(pgm,".tny");
-  source = fopen(pgm,"r");
-  if (source==NULL)
-  { fprintf(stderr,"File %s not found\n",pgm);
-    exit(1);
+     strcat(pgm,".cm");
+  strcat(path,pgm);
+  source = fopen(path,"r");
+  if (source==NULL) {
+    fprintf(stderr,N_VERM"Arquivo %s não encontrado.\n"RESET,path);
+    exit(-1);
   }
   listing = stdout; /* send listing to screen */
-  fprintf(listing,"\nTINY COMPILATION: %s\n",pgm);
+  fprintf(listing,N_BRC"\nCOMPILAÇÃO DO ARQUIVO C-\n"RESET);
+  fprintf(listing,"Fonte: "VERD"./%s\n"RESET,path);
+  nomeiaArquivos(pgm);
+
 #if NO_PARSE
   while (getToken()!=ENDFILE);
 #else
   syntaxTree = parse();
+  if(Error == TRUE){
+    printf(N_VERM "Impossível concluir a compilação!\n\n");
+    exit(-1);
+    }
   if (TraceParse) {
-    fprintf(listing,"\nSyntax tree:\n");
+    fprintf(listing,N_AZ"Árvore Sintática:\n"RESET);
     printTree(syntaxTree);
   }
-#if !NO_ANALYZE
-  if (! Error)
-  { if (TraceAnalyze) fprintf(listing,"\nBuilding Symbol Table...\n");
 
-    buildSymtab(syntaxTree);
-    // if (TraceAnalyze) fprintf(listing,"\nChecking Types...\n");
-    // typeCheck(syntaxTree);
-    //if (TraceAnalyze) fprintf(listing,"\nType Checking Finished\n");
+#if !NO_ANALYZE
+  if (TraceAnalyze) fprintf(listing,AZ"Construindo Tabela de Simbolos...\n"RESET);
+  buildSymtab(syntaxTree);
+  if (TraceAnalyze) fprintf(listing,N_VERD"\nAnálise Concluida!\n"RESET); 
+  if(Error){
+    printf(N_VERM "Impossível concluir a compilação!\n\n");
+    exit(-1);
   }
 #if !NO_CODE
-  if (! Error)
-  { char * codefile;
-    int fnlen = strcspn(pgm,".");
-    codefile = (char *) calloc(fnlen+4, sizeof(char));
-    strncpy(codefile,pgm,fnlen);
-    strcat(codefile,".tm");
-    code = fopen(codefile,"w");
-    if (code == NULL)
-    { printf("Unable to open %s\n",codefile);
-      exit(1);
-    }
-    codeGen(syntaxTree,codefile);
-    fclose(code);
-  }
+  if(TraceCode) fprintf(listing,AZ"Criando código intermediário...\n"RESET);
+  codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
+  if(!PrintCode) listing = NULL;
+  listing = stdout;
+  fprintf(listing, N_VERD "Compilação concluida com sucesso!\n\n" RESET);
+
 #endif
 #endif
 #endif
