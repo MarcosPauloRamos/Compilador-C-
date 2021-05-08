@@ -1,7 +1,7 @@
 /********************************************************************************/ 
 /* File: globals.h                                                              */
 /* Lex specification for Compiler                                               */
-/* References: Compiler discipline, teacher Galv�o, Unifesp - Brazil -2019      */
+/* References: Compiler discipline, teacher Galvão, Unifesp - Brazil -2019      */
 /* Marcos Paulo Ramos - mp001649@gmail.com                                      */
 /********************************************************************************/
 #ifndef _GLOBALS_H_
@@ -24,7 +24,7 @@
 #ifndef YYPARSER
 
 /* the name of the following file may change */
-#include "sintatico.tab.h"
+#include "Parser.tab.h"
 
 /* ENDFILE is implicitly defined by Yacc/Bison,
  * and not included in the tab.h file
@@ -44,29 +44,67 @@
 /* MAXRESERVED = the number of reserved words */
 #define MAXRESERVED 8
 
+/* Cores para o terminal */
+#define PRT "\e[0;30m" // Texto normal preto
+#define VERM "\e[0;31m" // Texto normal vermelho
+#define VERD "\e[0;32m" // Texto normal verde
+#define AMAR "\e[0;33m" // Texto normal amarelo
+#define AZ "\e[0;34m" // Texto normal azul
+#define MAG "\e[0;35m" // Texto normal magenta
+#define CIAN "\e[0;36m" // Texto normal ciano
+#define BRC "\e[0;37m" // Texto normal branco
+
+#define N_PRT "\e[1;30m" // Texto negrito preto
+#define N_VERM "\e[1;31m" // Texto negrito vermelho
+#define N_VERD "\e[1;32m" // Texto negrito verde
+#define N_AMAR "\e[1;33m" // Texto negrito amarelo
+#define N_AZ "\e[1;34m" // Texto negrito azul
+#define N_MAG "\e[1;35m" // Texto negrito magenta
+#define N_CIAN "\e[1;36m" // Texto negrito ciano
+#define N_BRC "\e[1;37m" // Texto negrito branco
+
+#define SUB_PRT "\e[4;30m"  // Texto sublinhado preto
+#define SUB_VERM "\e[4;31m"  // Texto sublinhado vermelho
+#define SUB_VERD "\e[4;32m"  // Texto sublinhado verde
+#define SUB_AMAR "\e[4;33m"  // Texto sublinhado amarelo
+#define SUB_AZ "\e[4;34m"  // Texto sublinhado azul
+#define SUB_MAG "\e[4;35m"  // Texto sublinhado magenta
+#define SUB_CIAN "\e[4;36m"  // Texto sublinhado ciano
+#define SUB_BRC "\e[4;37m"  // Texto sublinhado branco
+
+#define RESET "\e[0m"    // Texto padrão
+
+#define nregisters 32 // numero de registradores
+#define nregtemp 20 // numero de registradores temporários
+#define nregparam 10 // numero de registradores de parametros
+#define iniDataMem 361 // endereço da primeira posição da memória de dados
+#define lploc 461 // endereço do inicio das variaveis locais
+
+
 /* Yacc/Bison generates its own integer values
  * for tokens
  */
 typedef int TokenType;
+typedef int FlagType;
 
 extern FILE* source; /* source code text file */
 extern FILE* listing; /* listing output text file */
 extern FILE* code; /* code text file for TM simulator */
 
 extern int lineno; /* source line number for listing */
-
+extern int init_code; /* posicao inicial da primeira instrucao */
 /**************************************************/
 /***********   Syntax tree for parsing ************/
 /**************************************************/
 
 typedef enum {StmtK,ExpK} NodeKind;
-typedef enum {IfK,WhileK,AssignK,ReturnK} StmtKind;
-typedef enum {OpK,ConstK,IdK,VarDeclK,FunDeclK,AtivK,TypeK, ParamK, AssignElK} ExpKind;
+typedef enum {IfK,WhileK,AssignK,ReturnINT,ReturnVOID} StmtKind;
+typedef enum {OpK,ConstK,IdK,VarDeclK,VetDeclK,FunDeclK,AtivK,TypeK,VetorK,VarParamK,VetParamK} ExpKind;
 
 /* ExpType is used for type checking */
 typedef enum {Void,Integer,Boolean} ExpType;
-typedef enum {INTTYPE, VOIDTYPE, BOOLTYPE} dataTypes;
-typedef enum {VAR, FUN} IDTypes;
+typedef enum {INTTYPE, VOIDTYPE, NULLL} dataTypes;
+typedef enum {VAR, PVAR, FUN, CALL, VET, PVET, RETT} IDTypes;
 
 #define MAXCHILDREN 3
 
@@ -76,46 +114,34 @@ typedef struct treeNode
      int lineno;
      int size;
      int add;
+     int already_seem;
      NodeKind nodekind;
      union { StmtKind stmt; ExpKind exp;} kind;
      union { TokenType op;
              int val;
              char * name; } attr;
+     char * idname;
+     char *  scope;
+     char * idtype;
+     char * datatype;
+     int vet;
+     int declared;
+     int params;
      dataTypes type; /* for type checking of exps */
    } TreeNode;
+TreeNode * syntaxTree;
 
-/**************************************************/
-/***********   Flags for tracing       ************/
-/**************************************************/
+/* Caminhos dos arquivos a serem gerados pela compilação do arquivo */
+char *ArvSint; // Caminho para a árvore sintática
+char *TabSimb; // Caminho para a tabela de simbolos
+char *interCode; // Caminho para o codigo intermediário
 
-/* EchoSource = TRUE causes the source program to
- * be echoed to the listing file with line numbers
- * during parsing
- */
-extern int EchoSource;
 
-/* TraceScan = TRUE causes token information to be
- * printed to the listing file as each token is
- * recognized by the scanner
- */
-extern int TraceScan;
-
-/* TraceParse = TRUE causes the syntax tree to be
- * printed to the listing file in linearized form
- * (using indents for children)
- */
-extern int TraceParse;
-
-/* TraceAnalyze = TRUE causes symbol table inserts
- * and lookups to be reported to the listing file
- */
-extern int TraceAnalyze;
-
-/* TraceCode = TRUE causes comments to be written
- * to the TM code file as code is generated
- */
-extern int TraceCode;
-
-/* Error = TRUE prevents further passes if an error occurs */
-extern int Error;
+extern FlagType TraceScan;
+extern FlagType TraceParse;
+extern FlagType TraceAnalyze;
+extern FlagType TraceCode;
+extern FlagType PrintCode;
+extern FlagType Error;
+extern FlagType SO;
 #endif
