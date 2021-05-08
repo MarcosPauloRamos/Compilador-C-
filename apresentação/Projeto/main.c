@@ -1,6 +1,7 @@
 /****************************************************/
 /* File: main.c                                     */
 /* Semantic analyzer interface for TINY compiler    */
+/* Remodelado para utilizacao no projeto            */
 /* Compiler Construction: Principles and Practice   */
 /* Kenneth C. Louden                                */
 /****************************************************/
