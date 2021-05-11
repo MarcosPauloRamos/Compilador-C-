@@ -33,4 +33,7 @@ char * copyString( char * );
  */
 void printTree( TreeNode * );
 
+/* Insere o nome do caminho de cada arquivo a ser gerado após a compilação do código */
+void nomeiaArquivos(char *nome);
+
 #endif
