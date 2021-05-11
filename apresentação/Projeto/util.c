@@ -4,29 +4,37 @@
 /* References: Compiler discipline, teacher Galvão, Unifesp - Brazil -2019      */
 /* Marcos Paulo Ramos - mp001649@gmail.com                                      */
 /********************************************************************************/
+
+/* Variable indentno is used by printTree to
+ * store current number of spaces to indent
+ */
+static int indentno = 0;
+
+/* macros to increase/decrease indentation */
+#define INDENT indentno+=2
+#define UNINDENT indentno-=2
+
 #include "globals.h"
 #include "util.h"
+#include "cgen.h"
+#include "symtab.h"
 
 /* Procedure printToken prints a token
  * and its lexeme to the listing file
  */
-
-
-
  void printToken( TokenType token, const char* tokenString )
  { switch (token)
-   { case IF:
-     case RETURN:
-     case ELSE:
-     case INT:
-     case WHILE:
-     case VOID: fprintf(listing,"reserved word: %s\n",tokenString);break;
-
-     case IGL: fprintf(listing,"=\n"); break;
-     case CMP: fprintf(listing,"==\n"); break;
+   { case IF:   fprintf(listing,"%s\n",tokenString);break;
+     case RET:  fprintf(listing,"%s\n",tokenString);break;
+     case ELSE: fprintf(listing,"%s\n",tokenString);break;
+     case INT:  fprintf(listing,"%s\n",tokenString);break;
+     case WHI:  fprintf(listing,"%s\n",tokenString);break;
+     case VOID: fprintf(listing,"%s\n",tokenString);break;
+     case IGL: fprintf(listing,"==\n"); break;
+     case ATR: fprintf(listing,"=\n"); break;
      case DIF: fprintf(listing,"!=\n"); break;
-     case ME: fprintf(listing,"<\n"); break;
-     case MA: fprintf(listing,">\n"); break;
+     case MENO: fprintf(listing,"<\n"); break;
+     case MAIO: fprintf(listing,">\n"); break;
      case MEIG: fprintf(listing,"<=\n"); break;
      case MAIG: fprintf(listing,">=\n"); break;
      case APR: fprintf(listing,"(\n"); break;
@@ -36,26 +44,20 @@
      case ACH: fprintf(listing,"{\n"); break;
      case FCH: fprintf(listing,"}\n"); break;
      case PEV: fprintf(listing,";\n"); break;
-     case VIR: fprintf(listing,",\n"); break;
+     case VIRG: fprintf(listing,",\n"); break;
      case SOM: fprintf(listing,"+\n"); break;
      case SUB: fprintf(listing,"-\n"); break;
      case MUL: fprintf(listing,"*\n"); break;
      case DIV: fprintf(listing,"/\n"); break;
-     case ENDFILE: fprintf(listing,"EOF\n"); break;
-     case NUM:
+     case FIM: fprintf(listing,"EOF\n"); break;
+     case NUM: fprintf(listing,"NUM, val = %s\n",tokenString);break;
+     case ID:  fprintf(listing,"ID, nome = %s\n",tokenString);break;
+     case ERR:
        fprintf(listing,
-           "NUM, val= %s\n",tokenString);
+           "%s\n",tokenString);
        break;
-     case ID:
-       fprintf(listing,
-           "ID, name= %s\n",tokenString);
-       break;
-     case ERROR:
-       fprintf(listing,
-           "ERROR: %s\n",tokenString);
-       break;
-     default: /* should never happen */
-       fprintf(listing,"Unknown token: %d\n",token);
+     default: /* Nunca deve acontecer */
+       fprintf(listing,"Token Desconhecido: %d\n",token);
    }
  }
 
@@ -111,15 +113,6 @@ char * copyString(char * s)
   return t;
 }
 
-/* Variable indentno is used by printTree to
- * store current number of spaces to indent
- */
-static int indentno = 0;
-
-/* macros to increase/decrease indentation */
-#define INDENT indentno+=2
-#define UNINDENT indentno-=2
-
 /* printSpaces indents by printing spaces */
 static void printSpaces(void)
 { int i;
@@ -146,7 +139,10 @@ static void printSpaces(void)
          case AssignK:
            fprintf(listing,"Assign: \n");
            break;
-         case ReturnK:
+         case ReturnINT:
+           fprintf(listing,"Return\n");
+           break;
+         case ReturnVOID:
            fprintf(listing,"Return\n");
            break;
          default:
@@ -176,11 +172,17 @@ static void printSpaces(void)
            fprintf(listing,"Ativação: %s\n",tree->attr.name);
            break;
          case TypeK:
-           if(tree->size == 0)
-             fprintf(listing,"Tipo: %s*\n",tree->attr.name);
-           else
-             fprintf(listing,"Tipo: %s[%d]\n",tree->attr.name,tree->size);
+           fprintf(listing,"Tipo: %s*\n",tree->attr.name);
            break;
+         case VarParamK:
+           fprintf(listing,"Parametro: %s\n",tree->attr.name);
+           break; 
+         case VetParamK:
+           fprintf(listing,"Parametro: %s\n",tree->attr.name);
+           break; 
+         case VetorK:
+           fprintf(listing, "Vetor: %s", tree->attr.name);
+	          break;
          default:
            fprintf(listing,"Unknown ExpNode kind\n");
            break;
@@ -193,3 +195,22 @@ static void printSpaces(void)
    }
    UNINDENT;
  }
+void nomeiaArquivos(char *nome){
+   int fnlen = strcspn(nome,".");
+   // aloca espaços para nomes
+   ArvSint   = (char*)calloc(8+fnlen+5,sizeof(char));
+   TabSimb   = (char*)calloc(8+fnlen+4,sizeof(char));
+   interCode = (char*)calloc(8+fnlen+4,sizeof(char));
+   // insere pasta '/gerados' ao caminho
+   strcpy(ArvSint,"gerados/");
+   strcpy(TabSimb,"gerados/");
+   strcpy(interCode,"gerados/");
+   // insere nome do arquivo ao caminho
+   strncat(ArvSint,nome,fnlen);
+   strncat(TabSimb,nome,fnlen);
+   strncat(interCode,nome,fnlen);
+   // insere extensão do arquivo
+   strcat(ArvSint,".tree");
+   strcat(TabSimb,".tab");
+   strcat(interCode,".itm");
+}
