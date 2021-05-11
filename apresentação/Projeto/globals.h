@@ -12,23 +12,11 @@
 #include <ctype.h>
 #include <string.h>
 
-/* Yacc/Bison generates internally its own values
- * for the tokens. Other files can access these values
- * by including the tab.h file generated using the
- * Yacc/Bison option -d ("generate header")
- *
- * The YYPARSER flag prevents inclusion of the tab.h
- * into the Yacc/Bison output itself
- */
-
 #ifndef YYPARSER
 
-/* the name of the following file may change */
 #include "Parser.tab.h"
 
-/* ENDFILE is implicitly defined by Yacc/Bison,
- * and not included in the tab.h file
- */
+/* ENDFILE é definido implicitamente pelo Yacc/Bison, e não está incluso no arquivo tab.h file */
 #define ENDFILE 0
 
 #endif
@@ -41,9 +29,36 @@
 #define TRUE 1
 #endif
 
-/* MAXRESERVED = the number of reserved words */
+/* MAXRESERVED = o número de palavras reservadas */
 #define MAXRESERVED 8
 
+/* Cores para o terminal */
+#define PRT "\e[0;30m" // Texto normal preto
+#define VERM "\e[0;31m" // Texto normal vermelho
+#define VERD "\e[0;32m" // Texto normal verde
+#define AMAR "\e[0;33m" // Texto normal amarelo
+#define AZ "\e[0;34m" // Texto normal azul
+#define MAG "\e[0;35m" // Texto normal magenta
+#define CIAN "\e[0;36m" // Texto normal ciano
+#define BRC "\e[0;37m" // Texto normal branco
+
+#define N_PRT "\e[1;30m" // Texto negrito preto
+#define N_VERM "\e[1;31m" // Texto negrito vermelho
+#define N_VERD "\e[1;32m" // Texto negrito verde
+#define N_AMAR "\e[1;33m" // Texto negrito amarelo
+#define N_AZ "\e[1;34m" // Texto negrito azul
+#define N_MAG "\e[1;35m" // Texto negrito magenta
+#define N_CIAN "\e[1;36m" // Texto negrito ciano
+#define N_BRC "\e[1;37m" // Texto negrito branco
+
+#define SUB_PRT "\e[4;30m"  // Texto sublinhado preto
+#define SUB_VERM "\e[4;31m"  // Texto sublinhado vermelho
+#define SUB_VERD "\e[4;32m"  // Texto sublinhado verde
+#define SUB_AMAR "\e[4;33m"  // Texto sublinhado amarelo
+#define SUB_AZ "\e[4;34m"  // Texto sublinhado azul
+#define SUB_MAG "\e[4;35m"  // Texto sublinhado magenta
+#define SUB_CIAN "\e[4;36m"  // Texto sublinhado ciano
+#define SUB_BRC "\e[4;37m"  // Texto sublinhado branco
 
 #define RESET "\e[0m"    // Texto padrão
 
@@ -53,14 +68,11 @@
 #define iniDataMem 361 // endereço da primeira posição da memória de dados
 #define lploc 461 // endereço do inicio das variaveis locais
 
-
-/* Yacc/Bison generates its own integer values
- * for tokens
- */
+/* Yacc/Bison gera os próprios valores inteiros para os tokens */
 typedef int TokenType;
 typedef int FlagType;
 
-extern FILE* source; /* source code text file */
+extern FILE* source; /* arquivo texto do código fonte */
 extern FILE* listing; /* listing output text file */
 extern FILE* code; /* code text file for TM simulator */
 
@@ -74,15 +86,15 @@ typedef enum {StmtK,ExpK} NodeKind;
 typedef enum {IfK,WhileK,AssignK,ReturnINT,ReturnVOID} StmtKind;
 typedef enum {OpK,ConstK,IdK,VarDeclK,VetDeclK,FunDeclK,AtivK,TypeK,VetorK,VarParamK,VetParamK} ExpKind;
 
-/* ExpType is used for type checking */
+/* ExpType é usado para checagem de tipo */
 typedef enum {Void,Integer,Boolean} ExpType;
 typedef enum {INTTYPE, VOIDTYPE, NULLL} dataTypes;
 typedef enum {VAR, PVAR, FUN, CALL, VET, PVET, RETT} IDTypes;
 
 #define MAXCHILDREN 3
 
-typedef struct treeNode
-   { struct treeNode * child[MAXCHILDREN];
+typedef struct treeNode {
+  struct treeNode * child[MAXCHILDREN];
      struct treeNode * sibling;
      int lineno;
      int size;
@@ -100,15 +112,18 @@ typedef struct treeNode
      int vet;
      int declared;
      int params;
-     dataTypes type; /* for type checking of exps */
+     dataTypes type; /* para checagem de tipo das exps */
    } TreeNode;
+
+
 TreeNode * syntaxTree;
 
 /* Caminhos dos arquivos a serem gerados pela compilação do arquivo */
 char *ArvSint; // Caminho para a árvore sintática
 char *TabSimb; // Caminho para a tabela de simbolos
 char *interCode; // Caminho para o codigo intermediário
-
+char *assCode; // Caminho para o codigo assembly
+char *binCode; // caminho para o codigo binário
 
 extern FlagType TraceScan;
 extern FlagType TraceParse;
