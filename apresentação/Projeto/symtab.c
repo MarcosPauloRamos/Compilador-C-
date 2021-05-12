@@ -71,7 +71,7 @@ void st_insert( char * name, int lineno, int op, char* escopo, dataTypes RetType
   //Para inserir: não achou outra declaração, se achou verificar se o escopo é DIF e não é uma função
   if ( l == NULL || (op != 0 && l->escopo != escopo && l->IType != FUN && l->IType != CALL) || IType == RETT) { /* variável não está na tabela ainda */
     if(l != NULL && strcmp(l->name,name) == 0 && strcmp(l->escopo,"global") == 0){
-      fprintf(listing,N_VERM"[%d] Erro semântico!"RESET" Variável '%s' já declarada no escopo global.\n",lineno,name);
+      fprintf(listing,"[%d] Erro semântico! Variável '%s' já declarada no escopo global.\n",lineno,name);
       Error = TRUE;
     }else{
       l = (BucketList) malloc(sizeof(struct BucketListRec));
@@ -92,11 +92,11 @@ void st_insert( char * name, int lineno, int op, char* escopo, dataTypes RetType
     }
   }
   else if( (l->IType == FUN  && IType == VAR) || (l->IType == CALL  && IType == VAR)){
-    fprintf(listing,N_VERM"[%d] Erro semântico!"RESET" Nome da variável '%s' já utilizada como nome de função.\n",lineno,name);
+    fprintf(listing,"[%d] Erro semântico! Nome da variável '%s' já utilizada como nome de função.\n",lineno,name);
     Error = TRUE;
   }
   else if( l->escopo == escopo && op != 0 ){
-    fprintf(listing,N_VERM"[%d] Erro semântico!"RESET" Variável '%s' já declarada neste escopo.\n",lineno,name);
+    fprintf(listing,"[%d] Erro semântico! Variável '%s' já declarada neste escopo.\n",lineno,name);
     Error = TRUE;
     
   }else if(l->escopo != escopo){
@@ -112,18 +112,18 @@ void st_insert( char * name, int lineno, int op, char* escopo, dataTypes RetType
       l = l->next;
     }
     if(l == NULL){
-      fprintf(listing,N_VERM"[%d] Erro semântico!"RESET" Variável '%s' não declarada neste escopo.\n",lineno,name);
+      fprintf(listing,"[%d] Erro semântico! Variável '%s' não declarada neste escopo.\n",lineno,name);
       Error = TRUE;
     }
   }
   else if(op == 0){
     LineList t = l->lines;
     if((l->IType != VAR && l->IType != PVAR && l->IType != PVET) && IType == VAR){
-      fprintf(listing,N_VERM"[%d] Erro semântico!"RESET" Vetor '%s' usado como variável.\n",lineno,name);
+      fprintf(listing,"[%d] Erro semântico! Vetor '%s' usado como variável.\n",lineno,name);
       Error = TRUE;
       return;
     }else if((l->IType != VET && l->IType != PVET) && IType == VET){
-      fprintf(listing,N_VERM"[%d] Erro semântico!"RESET" Variável '%s' usada como vetor.\n",lineno,name);
+      fprintf(listing,"[%d] Erro semântico! Variável '%s' usada como vetor.\n",lineno,name);
       Error = TRUE;
       return;
     }
@@ -151,7 +151,7 @@ void busca_main () {
   while ((l != NULL) && ((strcmp("main",l->name) != 0 || l->IType == VAR)))
     l = l->next;
   if (l == NULL) {
-    fprintf(listing,N_VERM"     Erro semântico!"RESET" Função main não declarada\n");
+    fprintf(listing,"     Erro semântico! Função main não declarada\n");
     Error = TRUE;
   }
 }
