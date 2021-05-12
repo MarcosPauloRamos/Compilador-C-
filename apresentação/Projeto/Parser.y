@@ -399,8 +399,8 @@ int yyerror(char *message){
     if(yychar == -2) return 0;
     Error = TRUE;
 
-    if(yychar == ERR) printf(N_VERM"[%d] Erro léxico!"RESET" Lexema: ", lineno);
-    else printf(N_VERM"[%d] Erro sintático!"RESET" Token: ", lineno);
+    if(yychar == ERR) printf("[%d] Erro léxico! Lexema: ", lineno);
+    else printf("[%d] Erro sintático! Token: ", lineno);
     switch (yychar){
         case IF:   printf("%s\n",tokenString);break;
         case RET:  printf("%s\n",tokenString);break;
