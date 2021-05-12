@@ -1,4 +1,4 @@
-﻿/********************************************************************************/ 
+/********************************************************************************/ 
 /* File: analyze.y                                                              */
 /* Implemntação analisador semantico                                            */
 /* References: Compiler discipline, teacher Galvão, Unifesp - Brazil -2019      */
@@ -20,7 +20,7 @@ void UpdateScope(TreeNode * t){
     escopo = t->attr.name;
     if(getFunType(escopo) == INTTYPE && check_return == TRUE){
       if(checkReturn(escopo) == -1){
-        printf(N_VERM"[%d] Erro Semântico!"RESET" Retorno da função '%s' inexistente.\n",t->lineno,escopo);
+        printf("[%d] Erro Semântico! Retorno da função '%s' inexistente.\n",t->lineno,escopo);
         Error = TRUE;
       }
     }
@@ -63,7 +63,7 @@ static void insertNode( TreeNode * t) {
 
       case ReturnVOID:
         if(getFunType(escopo) == INTTYPE){
-          printf(N_VERM"[%d] Erro Semântico!"RESET" Retorno da função '%s' incompatível.\n",t->lineno,escopo);
+          printf("[%d] Erro Semântico! Retorno da função '%s' incompatível.\n",t->lineno,escopo);
           Error = TRUE;
         }
         st_insert("return",t->lineno,0,escopo,INTTYPE, NULLL, RETT, t->vet); 
@@ -71,7 +71,7 @@ static void insertNode( TreeNode * t) {
 
       case ReturnINT:
         if(getFunType(escopo) == VOIDTYPE){
-          printf(N_VERM"[%d] Erro Semântico!"RESET" Retorno da função '%s' incompatível.\n",t->lineno,escopo);
+          printf("[%d] Erro Semântico! Retorno da função '%s' incompatível.\n",t->lineno,escopo);
           Error = TRUE;
         }
         st_insert("return",t->lineno,0,escopo,INTTYPE, NULLL, RETT, t->vet); 
@@ -105,7 +105,7 @@ static void insertNode( TreeNode * t) {
             st_insert(t->attr.name,t->lineno,INDIF, "global",t->type, TIPO,FUN, t->vet);}
           else{
           /* encontrado na tabela, erro semântico */
-            fprintf(listing,N_VERM"[%d] Erro Semântico:"RESET" Múltiplas declarações da função '%s'.\n",t->lineno,t->attr.name);
+            fprintf(listing,"[%d] Erro Semântico: Múltiplas declarações da função '%s'.\n",t->lineno,t->attr.name);
             Error = TRUE;
           }
           break;
@@ -121,7 +121,7 @@ static void insertNode( TreeNode * t) {
         case IdK:
           if(t->add != 1){
             if (st_lookup(t->attr.name, escopo) == -1){
-              fprintf(listing,N_VERM"[%d] Erro Semântico!"RESET" A variável '%s' não foi declarada.\n",t->lineno,t->attr.name);
+              fprintf(listing,"[%d] Erro Semântico! A variável '%s' não foi declarada.\n",t->lineno,t->attr.name);
               Error = TRUE;
             }
             else {
@@ -137,7 +137,7 @@ static void insertNode( TreeNode * t) {
           if (st_lookup(t->attr.name, escopo) == -1 && (strcmp(t->attr.name, "input") != 0) && (strcmp(t->attr.name, "output") != 0) &&
              (strcmp(t->attr.name, "sysWake") != 0) && (strcmp(t->attr.name, "sysSleep") != 0) &&
              (strcmp(t->attr.name, "loadStack") != 0) && (strcmp(t->attr.name, "saveStack") != 0)){
-            fprintf(listing,N_VERM"[%d] Erro Semântico!"RESET" A função '%s' não foi declarada.\n",t->lineno,t->attr.name);
+            fprintf(listing,"[%d] Erro Semântico! A função '%s' não foi declarada.\n",t->lineno,t->attr.name);
             Error = TRUE;
           }
           else {
@@ -147,7 +147,7 @@ static void insertNode( TreeNode * t) {
               st_insert(t->attr.name,t->lineno,INDIF,escopo,getFunType(t->attr.name), TIPO,CALL, t->vet);
 
             else{
-              fprintf(listing,N_VERM"[%d] Erro Semântico!"RESET" Número de parâmetros para a função '%s' incompatível.\n",t->lineno,t->attr.name);
+              fprintf(listing,"[%d] Erro Semântico! Número de parâmetros para a função '%s' incompatível.\n",t->lineno,t->attr.name);
               Error = TRUE;
             }
           }
@@ -167,17 +167,17 @@ static void insertNode( TreeNode * t) {
 void buildSymtab(TreeNode * syntaxTree){
   traverse(syntaxTree,insertNode,nullProc);
   busca_main();
-  if (TraceAnalyze) fprintf(listing,AZ"Checando Tipos...\n"RESET);
+  if (TraceAnalyze) fprintf(listing,"Checando Tipos...\n");
   check_return = TRUE;
   typeCheck(syntaxTree);
   if(TraceAnalyze && Error != TRUE){
-    printf(N_AZ"                               Tabela de Simbolos:\n"RESET);
+    printf("                               Tabela de Simbolos:\n");
     printSymTab(listing);
     }
 }
 
 static void typeError(TreeNode * t, char * message){
-  fprintf(listing,N_VERM "[%d] %s\n",t->lineno,message);
+  fprintf(listing, "[%d] %s\n",t->lineno,message);
   Error = TRUE;
 }
 
@@ -192,11 +192,11 @@ void checkNode(TreeNode * t){
         if((t->child[0] == NULL) || (t->child[1] == NULL)) break;
         if (((t->child[0]->kind.exp == AtivK) &&( getFunType(t->child[0]->attr.name)) == VOIDTYPE) ||
             ((t->child[1]->kind.exp == AtivK) && (getFunType(t->child[1]->attr.name) == VOIDTYPE)))
-              typeError(t,N_VERM"Erro semântico!"RESET" Uma funcao com retorno VOID não pode ser um operando.");
+              typeError(t,"Erro semântico! Uma funcao com retorno VOID não pode ser um operando.");
         break;
       case AtivK:
         if (((t->params > 0) && (getFunStmt(t->attr.name)) == VOIDTYPE))
-              typeError(t,N_VERM"Erro semântico! "RESET"Insercao de parametros a uma função do tipo VOID.");
+              typeError(t,"Erro semântico! Insercao de parametros a uma função do tipo VOID.");
         break;
         default:
           break;
@@ -207,7 +207,7 @@ void checkNode(TreeNode * t){
         case AssignK:
           if((t->child[1] == NULL)) break;
           if (t->child[1]->kind.exp == AtivK && getFunType(t->child[1]->attr.name) == VOIDTYPE)
-            typeError(t,N_VERM"Erro semântico! "RESET"Uma funcao com retorno VOID não pode ser atribuida a uma variavel.");
+            typeError(t,"Erro semântico! Uma funcao com retorno VOID não pode ser atribuida a uma variavel.");
           break;
         default:
           break;
