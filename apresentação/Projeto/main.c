@@ -53,7 +53,7 @@ int main( int argc, char * argv[] ) {
   char path[120];
 
   if (argc < 3) {
-    fprintf(stderr,N_VERM"Arquivo não especificado.\nUso: %s <nome do arquivo> <flag>\n"RESET,argv[0]);
+    fprintf(stderr,"Arquivo não especificado.\nUso: %s <nome do arquivo> <flag>\n",argv[0]);
     exit(-1);
   }
   
@@ -72,12 +72,12 @@ int main( int argc, char * argv[] ) {
   strcat(path,pgm);
   source = fopen(path,"r");
   if (source==NULL) {
-    fprintf(stderr,N_VERM"Arquivo %s não encontrado.\n"RESET,path);
+    fprintf(stderr,"Arquivo %s não encontrado.\n",path);
     exit(-1);
   }
   listing = stdout; /* send listing to screen */
-  fprintf(listing,N_BRC"\nCOMPILAÇÃO DO ARQUIVO C-\n"RESET);
-  fprintf(listing,"Fonte: "VERD"./%s\n"RESET,path);
+  fprintf(listing,"\nCOMPILAÇÃO DO ARQUIVO C-\n");
+  fprintf(listing,"Fonte: ./%s\n",path);
   nomeiaArquivos(pgm);
 
 #if NO_PARSE
@@ -85,28 +85,28 @@ int main( int argc, char * argv[] ) {
 #else
   syntaxTree = parse();
   if(Error == TRUE){
-    printf(N_VERM "Impossível concluir a compilação!\n\n");
+    printf( "Impossível concluir a compilação!\n\n");
     exit(-1);
     }
   if (TraceParse) {
-    fprintf(listing,N_AZ"Árvore Sintática:\n"RESET);
+    fprintf(listing,"Árvore Sintática:\n");
     printTree(syntaxTree);
   }
 
 #if !NO_ANALYZE
-  if (TraceAnalyze) fprintf(listing,AZ"Construindo Tabela de Simbolos...\n"RESET);
+  if (TraceAnalyze) fprintf(listing,"Construindo Tabela de Simbolos...\n");
   buildSymtab(syntaxTree);
-  if (TraceAnalyze) fprintf(listing,N_VERD"\nAnálise Concluida!\n"RESET); 
+  if (TraceAnalyze) fprintf(listing,"\nAnálise Concluida!\n"); 
   if(Error){
-    printf(N_VERM "Impossível concluir a compilação!\n\n");
+    printf( "Impossível concluir a compilação!\n\n");
     exit(-1);
   }
 #if !NO_CODE
-  if(TraceCode) fprintf(listing,AZ"Criando código intermediário...\n"RESET);
+  if(TraceCode) fprintf(listing,"Criando código intermediário...\n");
   codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
   if(!PrintCode) listing = NULL;
   listing = stdout;
-  fprintf(listing, N_VERD "Compilação concluida com sucesso!\n\n" RESET);
+  fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
 
 #endif
 #endif
