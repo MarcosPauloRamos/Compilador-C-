@@ -490,7 +490,7 @@ static void genExp(TreeNode *tree){
 /* Procedimento recursivo que gera o código intermediário pela árvore sintática */
 static void cGen(TreeNode *tree){
   if(TraceCode){
-    emitComment(AMAR"Inicio cGen:"RESET);
+    emitComment("Inicio cGen:");
     if(tree==NULL)emitComment("NULO");
   }
   if (tree != NULL){
@@ -574,9 +574,9 @@ void codeGen(TreeNode *syntaxTree){
   cGen(syntaxTree);
   quad_insert(opHLT, empty, empty, empty);
   if(PrintCode){
-    printf(N_AZ"\nCódigo Intermediário:\n"RESET);
+    printf("\nCódigo Intermediário:\n");
     printCode(head);
-    fprintf(listing,N_VERD"Código intermediário criado com sucesso!\n\n"RESET);
+    fprintf(listing,"Código intermediário criado com sucesso!\n\n");
     }
 }
 
