@@ -399,7 +399,7 @@ static void genExp(TreeNode *tree){
     if (memLoc >= 0){
       quad_insert(opALLOC, addr_createString(tree->attr.name, var_escopo), addr_createIntConst(1), addr_createString(var_escopo,var_escopo));
     }else{
-      printf(N_VERM "Erro ao alocar a variável '%s'! - memLoc: %d\n" RESET,tree->attr.name,memLoc);
+      printf( "Erro ao alocar a variável '%s'! - memLoc: %d\n" ,tree->attr.name,memLoc);
       Error = TRUE;
       return;
     }
@@ -415,7 +415,7 @@ static void genExp(TreeNode *tree){
     if (memLoc >= 0){
       quad_insert(opALLOC, addr_createString(tree->attr.name, var_escopo), addr_createIntConst(tree->child[1]->attr.val), addr_createString(var_escopo,var_escopo));
     }else{
-      printf(N_VERM "Erro ao alocar o vetor '%s'! - memLoc: %d\n" RESET,tree->attr.name,memLoc);
+      printf( "Erro ao alocar o vetor '%s'! - memLoc: %d\n" ,tree->attr.name,memLoc);
       Error = TRUE;
       return;
     }
@@ -475,7 +475,7 @@ static void genExp(TreeNode *tree){
       quad_insert(opBEQ,addr1,addr2,empty);
       break;
     default:
-      emitComment(N_VERM"Erro ao criar quádrupla!"RESET" Operador desconhecido.");
+      emitComment("Erro ao criar quádrupla! Operador desconhecido.");
       break;
     }
     if (TraceCode)
