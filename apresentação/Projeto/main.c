@@ -49,6 +49,14 @@ FlagType SO; // Indica se a compilação é de um SO
 
 
 int main( int argc, char * argv[] ) {
+  FILE *arvore, *tabela, *intermed, *temp;
+  arvore = fopen(ArvSint,"w");
+  tabela = fopen(TabSimb,"w");
+  intermed = fopen(interCode,"w");
+	temp = listing;
+  
+  
+  
   char pgm[120]; /* nome do arquivo do código fonte */
   char path[120];
 
@@ -89,12 +97,14 @@ int main( int argc, char * argv[] ) {
     exit(-1);
     }
   if (TraceParse) {
+    listing = arvore;
     fprintf(listing,"Árvore Sintática:\n");
     printTree(syntaxTree);
   }
 
 #if !NO_ANALYZE
   if (TraceAnalyze) fprintf(listing,"Construindo Tabela de Simbolos...\n");
+  listing = tabela;
   buildSymtab(syntaxTree);
   if (TraceAnalyze) fprintf(listing,"\nAnálise Concluida!\n"); 
   if(Error){
@@ -103,11 +113,15 @@ int main( int argc, char * argv[] ) {
   }
 #if !NO_CODE
   if(TraceCode) fprintf(listing,"Criando código intermediário...\n");
+  listing = intermed;
   codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
-  if(!PrintCode) listing = NULL;
+  listing = temp;
   listing = stdout;
   fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
-
+	
+  fclose(arvore);
+  fclose(tabela);
+  fclose(intermed);
 #endif
 #endif
 #endif
