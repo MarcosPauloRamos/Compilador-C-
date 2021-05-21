@@ -38,25 +38,17 @@ FILE * source;
 FILE * listing;
 
 /* allocate and set tracing flags */
-FlagType TraceScan = FALSE; // Imprimir tokens
-FlagType TraceParse = FALSE; // Imprimir árvore sintática
-FlagType TraceAnalyze = FALSE; // Imprimir tabela de simbolos
-FlagType TraceCode = FALSE; // Imprimir nós da geração de código
-FlagType PrintCode = FALSE; // Imprimir os códigos gerados
+FlagType TraceScan = TRUE; // Imprimir tokens
+FlagType TraceParse = TRUE; // Imprimir árvore sintática
+FlagType TraceAnalyze = TRUE; // Imprimir tabela de simbolos
+FlagType TraceCode = TRUE; // Imprimir nós da geração de código
+FlagType PrintCode = TRUE; // Imprimir os códigos gerados
 FlagType CreateFiles = FALSE; // Criar arquivos de compilação
 FlagType Error = FALSE; // Flag que marca a existência de erros
 FlagType SO; // Indica se a compilação é de um SO
 
 
 int main( int argc, char * argv[] ) {
-  FILE *arvore, *tabela, *intermed, *temp;
-  arvore = fopen(ArvSint,"w");
-  tabela = fopen(TabSimb,"w");
-  intermed = fopen(interCode,"w");
-	temp = listing;
-  
-  
-  
   char pgm[120]; /* nome do arquivo do código fonte */
   char path[120];
 
@@ -97,14 +89,12 @@ int main( int argc, char * argv[] ) {
     exit(-1);
     }
   if (TraceParse) {
-    listing = arvore;
     fprintf(listing,"Árvore Sintática:\n");
     printTree(syntaxTree);
   }
 
 #if !NO_ANALYZE
   if (TraceAnalyze) fprintf(listing,"Construindo Tabela de Simbolos...\n");
-  listing = tabela;
   buildSymtab(syntaxTree);
   if (TraceAnalyze) fprintf(listing,"\nAnálise Concluida!\n"); 
   if(Error){
@@ -113,15 +103,12 @@ int main( int argc, char * argv[] ) {
   }
 #if !NO_CODE
   if(TraceCode) fprintf(listing,"Criando código intermediário...\n");
-  listing = intermed;
   codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
-  listing = temp;
+  if(!PrintCode) listing = NULL;
   listing = stdout;
   fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
+  if(CreateFiles) makeFiles();
 	
-  fclose(arvore);
-  fclose(tabela);
-  fclose(intermed);
 #endif
 #endif
 #endif
