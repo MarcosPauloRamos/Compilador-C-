@@ -215,4 +215,27 @@ void nomeiaArquivos(char *nome){
    strcat(interCode,".itm");
 }
 
-
+void makeFiles(){
+  int i;
+  FILE *arvore, *tabela, *intermed, *temp;
+  arvore = fopen(ArvSint,"w");
+  tabela = fopen(TabSimb,"w");
+  intermed = fopen(interCode,"w");
+	
+  temp = listing;
+	
+  listing = arvore;
+  printTree(syntaxTree);
+	
+  listing = tabela;
+  printSymTab(listing);
+	
+  listing = intermed;
+  printCode(getIntermediate());
+	
+  listing = temp;
+	
+  fclose(arvore);
+  fclose(tabela);
+  fclose(intermed);
+}
