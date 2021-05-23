@@ -52,10 +52,10 @@ int main( int argc, char * argv[] ) {
   char pgm[120]; /* nome do arquivo do código fonte */
   char path[120];
 
-  if (argc < 3) {
+ /* if (argc < 3) {
     fprintf(stderr,"Arquivo não especificado.\nUso: %s <nome do arquivo> <flag>\n",argv[0]);
     exit(-1);
-  }
+  }*/
   
   if(strcmp(argv[2],"-so") == 0){
     init_code = 0;
