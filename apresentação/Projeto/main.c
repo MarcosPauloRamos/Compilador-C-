@@ -104,7 +104,7 @@ int main( int argc, char * argv[] ) {
   if(!PrintCode) listing = NULL;
   listing = stdout;
   fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
-  if(CreateFiles) makeFiles();
+  if(CreateFiles) criararquivos();
 	
 #endif
 #endif
