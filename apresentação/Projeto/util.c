@@ -202,9 +202,9 @@ void nomeiaArquivos(char *nome){
    TabSimb   = (char*)calloc(8+fnlen+4,sizeof(char));
    interCode = (char*)calloc(8+fnlen+4,sizeof(char));
    // insere pasta '/gerados' ao caminho
-   strcpy(ArvSint,"gerados/");
-   strcpy(TabSimb,"gerados/");
-   strcpy(interCode,"gerados/");
+   strcpy(ArvSint,"saida/");
+   strcpy(TabSimb,"saida/");
+   strcpy(interCode,"saida/");
    // insere nome do arquivo ao caminho
    strncat(ArvSint,nome,fnlen);
    strncat(TabSimb,nome,fnlen);
