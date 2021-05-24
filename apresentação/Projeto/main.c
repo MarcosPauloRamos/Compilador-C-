@@ -11,10 +11,7 @@
 #define NO_PARSE FALSE
 /* set NO_ANALYZE to TRUE to get a parser-only compiler */
 #define NO_ANALYZE FALSE
-
-/* set NO_CODE to TRUE to get a compiler that does not
- * generate code
- */
+/* set NO_ANALYZE to TRUE to get a intermediary code -only compiler */
 #define NO_CODE FALSE
 
 #include "util.h"
@@ -52,10 +49,10 @@ int main( int argc, char * argv[] ) {
   char pgm[120]; /* nome do arquivo do código fonte */
   char path[120];
 
- /* if (argc < 3) {
+  if (argc < 3) {
     fprintf(stderr,"Arquivo não especificado.\nUso: %s <nome do arquivo> <flag>\n",argv[0]);
     exit(-1);
-  }*/
+  }
   
   if(strcmp(argv[2],"-so") == 0){
     init_code = 0;
@@ -65,7 +62,7 @@ int main( int argc, char * argv[] ) {
     SO = FALSE;
   }
   
-  strcpy(path,"codigos/");
+  strcpy(path,"entradas/");
   strcpy(pgm,argv[1]) ;
   if (strchr (pgm, '.') == NULL)
      strcat(pgm,".cm");
@@ -85,11 +82,11 @@ int main( int argc, char * argv[] ) {
 #else
   syntaxTree = parse();
   if(Error == TRUE){
-    printf( "Impossível concluir a compilação!\n\n");
+    printf( "Erro Encontrado - Impossível concluir a compilacao\n");
     exit(-1);
     }
   if (TraceParse) {
-    fprintf(listing,"Árvore Sintática:\n");
+    fprintf(listing,"Geracao da Avore Sintaica:\n");
     printTree(syntaxTree);
   }
 
@@ -98,7 +95,7 @@ int main( int argc, char * argv[] ) {
   buildSymtab(syntaxTree);
   if (TraceAnalyze) fprintf(listing,"\nAnálise Concluida!\n"); 
   if(Error){
-    printf( "Impossível concluir a compilação!\n\n");
+    printf( "Erro Encontrado - Impossível concluir a compilação!\n\n");
     exit(-1);
   }
 #if !NO_CODE
