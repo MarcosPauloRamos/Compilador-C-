@@ -215,7 +215,7 @@ void nomeiaArquivos(char *nome){
    strcat(interCode,".itm");
 }
 
-void makeFiles(){
+void criararquivos(){
   int i;
   FILE *arvore, *tabela, *intermed, *temp;
   arvore = fopen(ArvSint,"w");
