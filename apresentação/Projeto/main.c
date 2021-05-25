@@ -86,7 +86,7 @@ int main( int argc, char * argv[] ) {
     exit(-1);
     }
   if (TraceParse) {
-    fprintf(listing,"Geracao da Avore Sintaica:\n");
+    fprintf(listing,"Geracao da Avore Sintatica:\n");
     printTree(syntaxTree);
   }
 
@@ -95,15 +95,15 @@ int main( int argc, char * argv[] ) {
   buildSymtab(syntaxTree);
   if (TraceAnalyze) fprintf(listing,"\nAnálise Concluida!\n"); 
   if(Error){
-    printf( "Erro Encontrado - Impossível concluir a compilação!\n\n");
+    printf( "Erro Encontrado - Impossivel concluir a compilacao!\n\n");
     exit(-1);
   }
 #if !NO_CODE
-  if(TraceCode) fprintf(listing,"Criando código intermediário...\n");
+  if(TraceCode) fprintf(listing,"Criando codigo intermediario...\n");
   codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
   if(!PrintCode) listing = NULL;
   listing = stdout;
-  fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
+  fprintf(listing,  "Compilacao concluida com sucesso!\n\n" );
   if(CreateFiles) criararquivos();
 	
 #endif
