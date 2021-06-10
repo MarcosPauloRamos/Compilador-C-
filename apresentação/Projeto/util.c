@@ -18,6 +18,8 @@ static int indentno = 0;
 #include "util.h"
 #include "cgen.h"
 #include "symtab.h"
+#include "assembly.h"
+#include "binary.h"
 
 /* Procedure printToken prints a token
  * and its lexeme to the listing file
@@ -201,26 +203,37 @@ void nomeiaArquivos(char *nome){
    ArvSint   = (char*)calloc(8+fnlen+5,sizeof(char));
    TabSimb   = (char*)calloc(8+fnlen+4,sizeof(char));
    interCode = (char*)calloc(8+fnlen+4,sizeof(char));
+   assCode   = (char*)calloc(8+fnlen+5,sizeof(char));
+   binCode   = (char*)calloc(8+fnlen+5,sizeof(char));
    // insere pasta '/gerados' ao caminho
    strcpy(ArvSint,"saida/");
    strcpy(TabSimb,"saida/");
    strcpy(interCode,"saida/");
+   strcpy(assCode,"saida/");
+   strcpy(binCode,"saida/");
    // insere nome do arquivo ao caminho
    strncat(ArvSint,nome,fnlen);
    strncat(TabSimb,nome,fnlen);
    strncat(interCode,nome,fnlen);
+   strncat(assCode,nome,fnlen);
+   strncat(binCode,nome,fnlen);
    // insere extensão do arquivo
    strcat(ArvSint,".tree");
    strcat(TabSimb,".tab");
    strcat(interCode,".itm");
+   strcat(assCode,".asb");
+   strcat(binCode,".bin");
 }
 
 void criararquivos(){
   int i;
-  FILE *arvore, *tabela, *intermed, *temp;
+  FILE *arvore, *tabela, *intermed, *temp, *assembly, *binary;
+	
   arvore = fopen(ArvSint,"w");
   tabela = fopen(TabSimb,"w");
   intermed = fopen(interCode,"w");
+  assembly = fopen(assCode,"w");
+  binary = fopen(binCode,"w");
 	
   temp = listing;
 	
@@ -233,9 +246,17 @@ void criararquivos(){
   listing = intermed;
   printCode(getIntermediate());
 	
+  listing = assembly;
+  printAssembly();
+	
+  listing = binary;
+  generateBinary();
+	
   listing = temp;
 	
   fclose(arvore);
   fclose(tabela);
   fclose(intermed);
+  fclose(assembly);
+  fclose(binary);
 }
