@@ -23,6 +23,8 @@
 #include "analyze.h"
 #if !NO_CODE
 #include "cgen.h"
+#include "assembly.h"
+#include "binary.h"
 #endif
 #endif
 #endif
@@ -40,7 +42,7 @@ FlagType TraceParse = TRUE; // Imprimir árvore sintática
 FlagType TraceAnalyze = TRUE; // Imprimir tabela de simbolos
 FlagType TraceCode = TRUE; // Imprimir nós da geração de código
 FlagType PrintCode = TRUE; // Imprimir os códigos gerados
-FlagType CreateFiles = FALSE; // Criar arquivos de compilação
+FlagType CreateFiles = TRUE; // Criar arquivos de compilação
 FlagType Error = FALSE; // Flag que marca a existência de erros
 FlagType SO; // Indica se a compilação é de um SO
 
@@ -99,12 +101,24 @@ int main( int argc, char * argv[] ) {
     exit(-1);
   }
 #if !NO_CODE
-  if(TraceCode) fprintf(listing,"Criando codigo intermediario...\n");
+  if(TraceCode) fprintf(listing,"Criando código intermediário...\n");
   codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
+  generateAssembly(getIntermediate());  // GERADOR DE COD. ASSEMBLY
   if(!PrintCode) listing = NULL;
+  generateBinary();  // GERADOR DE COD. BINÁRIO
   listing = stdout;
-  fprintf(listing,  "Compilacao concluida com sucesso!\n\n" );
-  if(CreateFiles) criararquivos();
+  fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
+  // Cria os arquivos de compilação
+  if(CreateFiles) makeFiles();
+  else{
+    FILE *binary, *temp;
+    temp = listing;
+    binary = fopen(binCode,"w");
+    listing = binary;
+    generateBinary();
+    listing = temp;
+    fclose(binary);
+  }
 	
 #endif
 #endif
