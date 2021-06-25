@@ -17,7 +17,7 @@ const char *opcodeBins[] =   {"000000", "000000", "000000", "000000", "000000", 
 
 const char *functBins[] = { "000000", "000001", "000010", "000011", "000100", "000101", "000110", "000111", "001000", "001001", "001010" };
 
-void assembly2binary(AssemblyCode codeLine){
+void assembly_binary(AssemblyCode codeLine){
     Instruction inst;
     if(codeLine->kind == instr){
         inst = codeLine->line.instruction;
@@ -96,14 +96,14 @@ void assembly2binary(AssemblyCode codeLine){
 }
 
 void generateBinary () {
-    AssemblyCode a = getAssembly();
+    AssemblyCode aux = getAssembly();
     char *bin;
 
     if(PrintCode)
         printf( "\nCódigo Binário:\n" );
-    while (a != NULL && listing != NULL) {
-        assembly2binary(a);
-        a = a->next;
+    while (aux != NULL && listing != NULL) {
+        assembly_binary(aux);
+        aux = aux->next;
     }
     PrintCode = FALSE;
 }
