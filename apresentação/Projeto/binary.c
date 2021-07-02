@@ -7,7 +7,7 @@
 #define END_SWITCH 67
 
 const char *Prefixos[] = { "add", "sub", "mult", "div", "and", "or", "nand", "nor", "sle", "slt", "sge", "addi", "subi", "divi", "multi", "andi", "ori",
-                             "nori", "slei", "slti", "beq", "bne", "blt", "bgt", "sti", "ldi", "str", "ldr", "hlt", "in", "out", "jmp", "jal", "jst",
+                             "nori", "slei", "slti", "beq", "bne", "blt", "bgt", "sti", "ldi", "str", "ldr", "halt", "in", "out", "jmp", "jal", "jst",
                              "sleep", "wake", "lstk", "sstk", "mov", "put", "ctso" };
 
 const char *opcodeBins[] =   {"000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000", "000000", 
@@ -74,7 +74,7 @@ void assembly_binary(AssemblyCode codeLine){
             }
             break;
         case formatSYS:
-            if(inst.opcode == hlt || inst.opcode == sleep || inst.opcode == wake){
+            if(inst.opcode == halt || inst.opcode == sleep || inst.opcode == wake){
                 fprintf(listing,"ram[%d] = {6'b%s, 26'd0};",codeLine->lineno,
                                                            opcodeBins[inst.opcode]);
                 fprintf(listing,"   // %s\n",Prefixos[inst.opcode]);
