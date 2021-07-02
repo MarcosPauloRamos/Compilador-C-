@@ -42,7 +42,7 @@ char var_escopo[30] = "global";
 
 const char *OpKindNames[] = {"add", "sub", "mult", "div", "blt", "lequal", "bgt", "grequal", "beq", "bne", "and", "or", "atrib",
                             "alloc", "addi", "subi", "load", "store", "vec", "goto", "iff", "ret", "fun", "end",
-                            "param", "call", "arg", "label", "hlt", "mov", "put"};
+                            "param", "call", "arg", "label", "halt", "mov", "put"};
 
 void emitComment( char * c ) { 
   if (TraceCode) fprintf(listing,"// %s\n",c);
@@ -572,7 +572,7 @@ void printCode(QuadList head){
 void codeGen(TreeNode *syntaxTree){
   empty = addr_createEmpty();
   cGen(syntaxTree);
-  quad_insert(opHLT, empty, empty, empty);
+  quad_insert(opHALT, empty, empty, empty);
   if(PrintCode){
     printf("\nCódigo Intermediário:\n");
     printCode(head);
