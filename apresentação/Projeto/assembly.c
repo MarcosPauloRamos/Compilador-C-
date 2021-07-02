@@ -6,7 +6,7 @@
 #define QUANTUM 20
 
 const char *InstrNames[] = { "add", "sub", "mult", "div", "and", "or", "nand", "nor", "sle", "slt", "sge", "addi", "subi", "divi", "multi", "andi", "ori",
-                             "nori", "slei", "slti", "beq", "bne", "blt", "bgt", "sti", "ldi", "str", "ldr", "hlt", "in", "out", "jmp", "jal", "jst",
+                             "nori", "slei", "slti", "beq", "bne", "blt", "bgt", "sti", "ldi", "str", "ldr", "halt", "in", "out", "jmp", "jal", "jst",
                              "sleep", "wake", "lstk", "sstk", "mov", "put", "ctso" };
 
 const char * regNames[] = { "$zero", "$r1", "$r2", "$r3", "$r4", "$r5", "$r6", "$r7", "$r8", "$r9", "$r10", "$r11", "$r12", "$r13", "$r14", "$r15",
@@ -413,9 +413,9 @@ void generateInstruction (QuadList l) {
                 insertLabel(a1.contents.var.name);
                 break;
             
-            case opHLT:
+            case opHALT:
                 insertLabel("end");
-                instructionSYS(hlt, none);
+                instructionSYS(halt, none);
                 break;
     
             default:
@@ -480,7 +480,7 @@ void printAssembly () {
             break;
 
             case formatSYS:
-                if(a->line.instruction.opcode == hlt || a->line.instruction.opcode == wake || a->line.instruction.opcode == sleep || a->line.instruction.opcode == ctso)
+                if(a->line.instruction.opcode == halt || a->line.instruction.opcode == wake || a->line.instruction.opcode == sleep || a->line.instruction.opcode == ctso)
                     fprintf(listing,"%s;\n", InstrNames[a->line.instruction.opcode]);
                 else if (a->line.instruction.opcode == in || a->line.instruction.opcode == out || a->line.instruction.opcode == sstk || a->line.instruction.opcode == lstk )
                     fprintf(listing,"%s %s;\n", InstrNames[a->line.instruction.opcode], regNames[a->line.instruction.reg2]);
