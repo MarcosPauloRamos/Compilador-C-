@@ -109,7 +109,7 @@ int main( int argc, char * argv[] ) {
   listing = stdout;
   fprintf(listing,  "Compilação concluida com sucesso!\n\n" );
   // Cria os arquivos de compilação
-  if(CreateFiles) makeFiles();
+  if(CreateFiles) criararquivos();
   else{
     FILE *binary, *temp;
     temp = listing;
