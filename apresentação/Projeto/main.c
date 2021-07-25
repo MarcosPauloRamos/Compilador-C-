@@ -103,7 +103,7 @@ int main( int argc, char * argv[] ) {
 #if !NO_CODE
   if(TraceCode) fprintf(listing,"Criando código intermediário...\n");
   codeGen(syntaxTree);  //GERADOR DE COD. INTERMED.
-  generateAssembly(getIntermediate());  // GERADOR DE COD. ASSEMBLY
+  codeass(getIntermediate());  // GERADOR DE COD. ASSEMBLY
   if(!PrintCode) listing = NULL;
   generateBinary();  // GERADOR DE COD. BINÁRIO
   listing = stdout;
