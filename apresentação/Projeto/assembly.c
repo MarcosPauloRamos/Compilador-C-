@@ -506,7 +506,7 @@ void printAssembly () {
 }
 
 /* Função inicial da geração de código assembly */
-void generateAssembly (QuadList head) {
+void codeass (QuadList head) {
     line = init_code;
     initCode(head);
     createInstructions(head);
