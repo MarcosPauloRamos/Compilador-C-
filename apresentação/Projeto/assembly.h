@@ -46,7 +46,7 @@ typedef struct FunListRec {
     struct FunListRec * next;
 } * FunList;
 
-void generateAssembly (QuadList head);
+void codeass (QuadList head);
 
 AssemblyCode getAssembly ();
 
