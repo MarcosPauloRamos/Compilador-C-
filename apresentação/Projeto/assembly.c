@@ -426,7 +426,7 @@ void generateInstruction (QuadList l) {
     }
 }
 
-void createInstructions (QuadList head) {
+void criarInstrucao (QuadList head) {
     QuadList l = head;
     generateInstruction(l);
     AssemblyCode a = codehead;
@@ -509,7 +509,7 @@ void printAssembly () {
 void codeass (QuadList head) {
     line = init_code;
     initCode(head);
-    createInstructions(head);
+    criarInstrucao(head);
     if(PrintCode)
         printAssembly();
    }
