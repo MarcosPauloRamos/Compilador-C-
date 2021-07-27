@@ -132,7 +132,7 @@ void insertInstruction (InstrFormat format, InstrKind opcode, Reg reg1, Reg reg2
     line ++;
 }
 
-void instructionR(InstrKind opcode, Reg rf, Reg r1, Reg r2){
+void registrador(InstrKind opcode, Reg rf, Reg r1, Reg r2){
     insertInstruction(formatR, opcode, rf, r1,r2, 0, NULL);
 }
 
@@ -222,35 +222,35 @@ void inserirInstrucao (QuadList l) {
                 break;
             
             case opADD:
-                instructionR(add, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(add, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opSUB:
-                instructionR(sub, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(sub, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opMULT:
-                instructionR(mult, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(mult, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opDIV:
-                instructionR(divi, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(divi, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opSLE:
-                instructionR(sle, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(sle, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opSGE:
-                instructionR(sge, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(sge, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opAND:
-                instructionR(and, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(and, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opOR:
-                instructionR(or, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
+                registrador(or, getReg(a1.contents.var.name), getReg(a2.contents.var.name), getReg(a3.contents.var.name));
                 break;
     
             case opBGT:
@@ -296,7 +296,7 @@ void inserirInstrucao (QuadList l) {
             case opVEC:
                 if(getVarKind(a2.contents.var.name,a2.contents.var.scope) == address){
                     imediato(ldr,getReg(a1.contents.var.name),$lp,getMemLoc(a2.contents.var.name,a2.contents.var.scope),NULL);
-                    instructionR(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),getReg(a1.contents.var.name));
+                    registrador(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),getReg(a1.contents.var.name));
                     imediato(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),0,NULL);
                 }else{
                     aux = getMemLoc(a2.contents.var.name,a2.contents.var.scope);
@@ -329,7 +329,7 @@ void inserirInstrucao (QuadList l) {
                     imediato(str, getReg(a1.contents.var.name), $lp, aux, NULL);
                 
                 } else{
-                    instructionR(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),$lp);
+                    registrador(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),$lp);
                     imediato(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
                 }
                 if(switch_SO > QUANTUM && !SO) instructionSYS(ctso, none);
