@@ -102,7 +102,7 @@ void insertLabel (char * label) {
     }
 }
 
-void insertInstruction (InstrFormat format, InstrKind opcode, Reg reg1, Reg reg2, Reg reg3, int imed, char * label) {
+void formatogeral (InstrFormat format, InstrKind opcode, Reg reg1, Reg reg2, Reg reg3, int imed, char * label) {
     Instruction i;
     switch_SO++;
     if(opcode == ctso) switch_SO = 0;
@@ -133,19 +133,19 @@ void insertInstruction (InstrFormat format, InstrKind opcode, Reg reg1, Reg reg2
 }
 
 void registrador(InstrKind opcode, Reg rf, Reg r1, Reg r2){
-    insertInstruction(formatR, opcode, rf, r1,r2, 0, NULL);
+    formatogeral(formatR, opcode, rf, r1,r2, 0, NULL);
 }
 
 void imediato(InstrKind opcode, Reg rf, Reg r1, int imed, char *label){
-    insertInstruction(formatI,opcode,rf,r1,$zero,imed,label);
+    formatogeral(formatI,opcode,rf,r1,$zero,imed,label);
 }
 
 void sistema(InstrKind opcode, Reg rf){
-    insertInstruction(formatSYS,opcode,$zero,rf,$zero,0,NULL);
+    formatogeral(formatSYS,opcode,$zero,rf,$zero,0,NULL);
 }
 
 void salto (InstrKind opcode, int im, char * imlbl) {
-    insertInstruction(formatJ, opcode, $zero, $zero, $zero, im, imlbl);
+    formatogeral(formatJ, opcode, $zero, $zero, $zero, im, imlbl);
 }
 
 Reg getParamReg () {
