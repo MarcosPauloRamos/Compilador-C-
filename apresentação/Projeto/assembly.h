@@ -1,4 +1,4 @@
-typedef enum { formatR, formatI, formatSYS, format4, formatJ } InstrFormat;
+typedef enum { formatR, formatI, formatSYS, formatJ } InstrFormat;
 
 typedef enum { instr, lbl } LineKind;
 
