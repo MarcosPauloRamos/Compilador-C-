@@ -330,7 +330,7 @@ void inserirInstrucao (QuadList l) {
                 
                 } else{
                     instructionR(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),$lp);
-                    imeditao(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
+                    imediato(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
                 }
                 if(switch_SO > QUANTUM && !SO) instructionSYS(ctso, none);
                 break;
