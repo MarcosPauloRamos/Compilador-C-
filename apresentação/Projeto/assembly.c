@@ -517,7 +517,3 @@ void codeass (QuadList head) {
 AssemblyCode getAssembly() {
     return codehead;
 }
-
-int getSize() {
-    return line - 1;
-}
