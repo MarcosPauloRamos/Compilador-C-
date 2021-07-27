@@ -140,7 +140,7 @@ void imediato(InstrKind opcode, Reg rf, Reg r1, int imed, char *label){
     insertInstruction(formatI,opcode,rf,r1,$zero,imed,label);
 }
 
-void instructionSYS(InstrKind opcode, Reg rf){
+void sistema(InstrKind opcode, Reg rf){
     insertInstruction(formatSYS,opcode,$zero,rf,$zero,0,NULL);
 }
 
@@ -332,7 +332,7 @@ void inserirInstrucao (QuadList l) {
                     registrador(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),$lp);
                     imediato(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
                 }
-                if(switch_SO > QUANTUM && !SO) instructionSYS(ctso, none);
+                if(switch_SO > QUANTUM && !SO) sistema(ctso, none);
                 break;
             
             case opGOTO:
@@ -375,22 +375,22 @@ void inserirInstrucao (QuadList l) {
             
             case opCALL:
                 if (strcmp(a2.contents.var.name, "input") == 0) {
-                    instructionSYS(in, $ret);
+                    sistema(in, $ret);
                 }
                 else if (strcmp(a2.contents.var.name, "output") == 0) {
-                    instructionSYS(out,$p1);
+                    sistema(out,$p1);
                 }
                 else if (strcmp(a2.contents.var.name, "sysWake") == 0){
-                    instructionSYS(wake, none);
+                    sistema(wake, none);
                 }
                 else if (strcmp(a2.contents.var.name, "sysSleep") == 0){
-                    instructionSYS(sleep, none);
+                    sistema(sleep, none);
                 }
                 else if (strcmp(a2.contents.var.name, "loadStack") == 0){
-                    instructionSYS(lstk, $p1);
+                    sistema(lstk, $p1);
                 }
                 else if (strcmp(a2.contents.var.name, "saveStack") == 0){
-                    instructionSYS(sstk, $p1);
+                    sistema(sstk, $p1);
                 }
                 else {
                     aux = getFunSize(a2.contents.var.scope);
@@ -415,7 +415,7 @@ void inserirInstrucao (QuadList l) {
             
             case opHALT:
                 insertLabel("end");
-                instructionSYS(halt, none);
+                sistema(halt, none);
                 break;
     
             default:
