@@ -136,7 +136,7 @@ void instructionR(InstrKind opcode, Reg rf, Reg r1, Reg r2){
     insertInstruction(formatR, opcode, rf, r1,r2, 0, NULL);
 }
 
-void instructionI(InstrKind opcode, Reg rf, Reg r1, int imed, char *label){
+void imediato(InstrKind opcode, Reg rf, Reg r1, int imed, char *label){
     insertInstruction(formatI,opcode,rf,r1,$zero,imed,label);
 }
 
@@ -194,7 +194,7 @@ int getFunSize (char * id) {
 }
 
 void initCode (QuadList head) {
-    instructionI(addi,$lp,$zero,lploc,NULL);
+    imediato(addi,$lp,$zero,lploc,NULL);
     insertFun("global");
 }
 
@@ -214,11 +214,11 @@ void inserirInstrucao (QuadList l) {
         switch (q.op) {
             
             case opMOV:
-                instructionI(mov, getReg(a1.contents.var.name), getReg(a2.contents.var.name), a3.contents.val, NULL);
+                imediato(mov, getReg(a1.contents.var.name), getReg(a2.contents.var.name), a3.contents.val, NULL);
                 break;
 
             case opPUT:
-                instructionI(put, getReg(a1.contents.var.name), getReg(a2.contents.var.name), a3.contents.val, NULL);
+                imediato(put, getReg(a1.contents.var.name), getReg(a2.contents.var.name), a3.contents.val, NULL);
                 break;
             
             case opADD:
@@ -254,23 +254,23 @@ void inserirInstrucao (QuadList l) {
                 break;
     
             case opBGT:
-                instructionI(bgt, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
+                imediato(bgt, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
                 break;
     
             case opBLT:
-                instructionI(blt, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
+                imediato(blt, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
                 break;
     
             case opBEQ:
-                instructionI(beq, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
+                imediato(beq, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
                 break;
     
             case opBNE:
-                instructionI(bne, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
+                imediato(bne, getReg(a1.contents.var.name), getReg(a2.contents.var.name), -1, a3.contents.var.name);
                 break;
             
             case opATRIB:
-                instructionI(mov, getReg(a1.contents.var.name), getReg(a2.contents.var.name),0,NULL);
+                imediato(mov, getReg(a1.contents.var.name), getReg(a2.contents.var.name),0,NULL);
                 break;
             
             case opALLOC:
@@ -281,30 +281,30 @@ void inserirInstrucao (QuadList l) {
                 break;
             
             case opADDI:
-                instructionI(addi, getReg(a1.contents.var.name), getReg(a2.contents.var.name), a3.contents.val, NULL);
+                imediato(addi, getReg(a1.contents.var.name), getReg(a2.contents.var.name), a3.contents.val, NULL);
                 break;
     
             case opLOAD:
                 aux = getMemLoc(a2.contents.var.name,a2.contents.var.scope);
                 if (aux == -1) { // caso a variável for global
                     aux = getMemLoc(a2.contents.var.name, "global");
-                    instructionI(ldi, getReg(a1.contents.var.name), none, aux, NULL);
+                    imediato(ldi, getReg(a1.contents.var.name), none, aux, NULL);
                 }else 
-                    instructionI(ldr, getReg(a1.contents.var.name), $lp, aux, NULL);
+                    imediato(ldr, getReg(a1.contents.var.name), $lp, aux, NULL);
                 break;
 
             case opVEC:
                 if(getVarKind(a2.contents.var.name,a2.contents.var.scope) == address){
-                    instructionI(ldr,getReg(a1.contents.var.name),$lp,getMemLoc(a2.contents.var.name,a2.contents.var.scope),NULL);
+                    imediato(ldr,getReg(a1.contents.var.name),$lp,getMemLoc(a2.contents.var.name,a2.contents.var.scope),NULL);
                     instructionR(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),getReg(a1.contents.var.name));
-                    instructionI(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),0,NULL);
+                    imediato(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),0,NULL);
                 }else{
                     aux = getMemLoc(a2.contents.var.name,a2.contents.var.scope);
                     if (aux == -1) { // caso a variável for global
                         aux = getMemLoc(a2.contents.var.name, "global");
-                        instructionI(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);    
+                        imediato(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);    
                     }else{
-                        instructionI(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
+                        imediato(ldr,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
                     }
                 }break;
 
@@ -314,23 +314,23 @@ void inserirInstrucao (QuadList l) {
                     aux = getMemLoc(a2.contents.var.name, "global");
 
                     if(a3.kind == Empty) // caso não seja um vetor global
-                        instructionI(sti, getReg(a1.contents.var.name), none, aux, NULL);
+                        imediato(sti, getReg(a1.contents.var.name), none, aux, NULL);
                     else if(a3.kind == IntConst){
                         aux += a3.contents.val-1;
-                        instructionI(sti, getReg(a1.contents.var.name), none, aux, NULL);
+                        imediato(sti, getReg(a1.contents.var.name), none, aux, NULL);
 
-                    }else instructionI(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
+                    }else imediato(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
                     
                 }else if(a3.kind == Empty) // caso não seja um vetor local
-                    instructionI(str, getReg(a1.contents.var.name), $lp, aux, NULL);
+                    imediato(str, getReg(a1.contents.var.name), $lp, aux, NULL);
                 
                 else if(a3.kind == IntConst){ // caso seja um vetor local
                     aux += a3.contents.val-1;
-                    instructionI(str, getReg(a1.contents.var.name), $lp, aux, NULL);
+                    imediato(str, getReg(a1.contents.var.name), $lp, aux, NULL);
                 
                 } else{
                     instructionR(add,getReg(a3.contents.var.name),getReg(a3.contents.var.name),$lp);
-                    instructionI(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
+                    imeditao(str,getReg(a1.contents.var.name),getReg(a3.contents.var.name),aux,NULL);
                 }
                 if(switch_SO > QUANTUM && !SO) instructionSYS(ctso, none);
                 break;
@@ -340,8 +340,8 @@ void inserirInstrucao (QuadList l) {
                 break;
             
             case opRET:
-                if (a1.kind == String) instructionI(mov, $ret, getReg(a1.contents.var.name), 0, NULL);
-                else instructionI(mov, $ret, $zero, a1.contents.val, NULL);
+                if (a1.kind == String) imediato(mov, $ret, getReg(a1.contents.var.name), 0, NULL);
+                else imediato(mov, $ret, $zero, a1.contents.val, NULL);
                 
                 if(strcmp(a1.contents.var.scope,"main") != 0){
                     instructionJ(jst, 0, NULL);
@@ -369,7 +369,7 @@ void inserirInstrucao (QuadList l) {
                 break;
             
             case opPARAM:
-                instructionI(mov, getParamReg(), getReg(a1.contents.var.name), 0, NULL);
+                imediato(mov, getParamReg(), getReg(a1.contents.var.name), 0, NULL);
                 curparam = (curparam+1)%nregparam;
                 break;
             
@@ -394,9 +394,9 @@ void inserirInstrucao (QuadList l) {
                 }
                 else {
                     aux = getFunSize(a2.contents.var.scope);
-                    instructionI(addi,$lp,$lp,aux,NULL);
+                    imediato(addi,$lp,$lp,aux,NULL);
                     instructionJ(jal, -1, a2.contents.var.name);
-                    instructionI(subi,$lp,$lp,aux,NULL);
+                    imediato(subi,$lp,$lp,aux,NULL);
                 }
                 narg = a3.contents.val;
                 curparam = 0;
@@ -405,7 +405,7 @@ void inserirInstrucao (QuadList l) {
             case opARG:
                 insertVar(a3.contents.var.scope, a1.contents.var.name, 1, checkType(l));
                 FunList f = funlisthead;
-                instructionI(str, getArgReg(), $lp, getMemLoc(a1.contents.var.name,a1.contents.var.scope), NULL);
+                imediato(str, getArgReg(), $lp, getMemLoc(a1.contents.var.name,a1.contents.var.scope), NULL);
                 curarg ++;
                 break;
             
