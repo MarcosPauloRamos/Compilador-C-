@@ -51,5 +51,3 @@ void codeass (QuadList head);
 AssemblyCode getAssembly ();
 
 void printAssembly ();
-
-int getSize();
