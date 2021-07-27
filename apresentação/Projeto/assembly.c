@@ -144,7 +144,7 @@ void sistema(InstrKind opcode, Reg rf){
     insertInstruction(formatSYS,opcode,$zero,rf,$zero,0,NULL);
 }
 
-void instructionJ (InstrKind opcode, int im, char * imlbl) {
+void salto (InstrKind opcode, int im, char * imlbl) {
     insertInstruction(formatJ, opcode, $zero, $zero, $zero, im, imlbl);
 }
 
@@ -336,7 +336,7 @@ void inserirInstrucao (QuadList l) {
                 break;
             
             case opGOTO:
-                instructionJ(jmp, -1, a1.contents.var.name);
+                salto(jmp, -1, a1.contents.var.name);
                 break;
             
             case opRET:
@@ -344,14 +344,14 @@ void inserirInstrucao (QuadList l) {
                 else imediato(mov, $ret, $zero, a1.contents.val, NULL);
                 
                 if(strcmp(a1.contents.var.scope,"main") != 0){
-                    instructionJ(jst, 0, NULL);
+                    salto(jst, 0, NULL);
 
-                } else instructionJ(jmp, -1, "end");
+                } else salto(jmp, -1, "end");
                 break;
             
             case opFUN:
                 if (jmpmain == 0) {
-                    instructionJ(jmp, -1, "main");
+                    salto(jmp, -1, "main");
                     jmpmain = 1;
                 }
                 insertLabel(a1.contents.var.name);
@@ -361,10 +361,10 @@ void inserirInstrucao (QuadList l) {
             
             case opEND:
                 if (strcmp(a1.contents.var.name, "main") == 0) {
-                    instructionJ(jmp, -1, "end");
+                    salto(jmp, -1, "end");
                 }
                 else {
-                    instructionJ(jst, 0, NULL);
+                    salto(jst, 0, NULL);
                 }
                 break;
             
@@ -395,7 +395,7 @@ void inserirInstrucao (QuadList l) {
                 else {
                     aux = getFunSize(a2.contents.var.scope);
                     imediato(addi,$lp,$lp,aux,NULL);
-                    instructionJ(jal, -1, a2.contents.var.name);
+                    salto(jal, -1, a2.contents.var.name);
                     imediato(subi,$lp,$lp,aux,NULL);
                 }
                 narg = a3.contents.val;
