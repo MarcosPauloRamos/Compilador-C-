@@ -198,7 +198,7 @@ void initCode (QuadList head) {
     insertFun("global");
 }
 
-void generateInstruction (QuadList l) {
+void inserirInstrucao (QuadList l) {
     Quad q;
     Address a1, a2, a3;
     int aux;
@@ -428,7 +428,7 @@ void generateInstruction (QuadList l) {
 
 void criarInstrucao (QuadList head) {
     QuadList l = head;
-    generateInstruction(l);
+    inserirInstrucao(l);
     AssemblyCode a = codehead;
     while (a != NULL) {
         if (a->kind == instr) {
