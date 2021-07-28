@@ -24,54 +24,54 @@ int jmpmain = 0;
 int switch_SO = 0;
 
 void Funcao (char * id) {
-    FunList new = (FunList) malloc(sizeof(struct FunListRec));
-    new->id = (char *) malloc(strlen(id) * sizeof(char));
-    strcpy(new->id, id);
-    new->size = 0;
-    new->next = NULL;
+    FunList inserido = (FunList) malloc(sizeof(struct FunListRec));
+    inserido->id = (char *) malloc(strlen(id) * sizeof(char));
+    strcpy(inserido->id, id);
+    inserido->size = 0;
+    inserido->next = NULL;
     if (funlisthead == NULL) {
-        funlisthead = new;
+        funlisthead = inserido;
     }
     else {
-        FunList f = funlisthead;
-        while (f->next != NULL) f = f->next;
-        f->next = new;
+        FunList func = funlisthead;
+        while (func->next != NULL) func = func->next;
+        func->next = inserido;
     }
     nscopes ++;
 }
 
 void insertVar (char * scope, char * id, int size, VarKind kind) {
-    FunList f = funlisthead;
+    FunList func = funlisthead;
     if(scope == NULL){
-    if(kind == 1 )
-    scope= f->id;
-    else
-    scope= f->next->id;
+      if(kind == 1 )
+        scope= func->id;
+      else
+        scope= func->next->id;
     }
-    while (f != NULL && strcmp(f->id, scope) != 0)  f = f->next;
-      if (f == NULL) {
+    while (func != NULL && strcmp(func->id, scope) != 0)  func = func->next;
+      if (func == NULL) {
         Funcao(scope);
-        f = funlisthead;
-        while (f != NULL && strcmp(f->id, scope) != 0 ) 
-        f = f->next;
+        func = funlisthead;
+        while (func != NULL && strcmp(func->id, scope) != 0 ) 
+        func = func->next;
     }
-    VarList new = (VarList) malloc(sizeof(struct VarListRec));
-    new->id = (char *) malloc(strlen(id) * sizeof(char));
-    strcpy(new->id, id);
-    new->size = size;
-    new->memloc = getMemLoc(id,scope);
-    new->kind = kind;
-    new->next = NULL;
-    if (f->vars == NULL) {
-        f->vars = new;
+    VarList inserido = (VarList) malloc(sizeof(struct VarListRec));
+    inserido->id = (char *) malloc(strlen(id) * sizeof(char));
+    strcpy(inserido->id, id);
+    inserido->size = size;
+    inserido->memloc = getMemLoc(id,scope);
+    inserido->kind = kind;
+    inserido->next = NULL;
+    if (func->vars == NULL) {
+        func->vars = inserido;
     }
     else {
-        VarList v = f->vars;
+        VarList v = func->vars;
         while (v->next != NULL) v = v->next;
-        v->next = new;
+        v->next = inserido;
     }
     
-    f->size = f->size + size;
+    func->size = func->size + size;
 }
 
 VarKind checkType (QuadList l) {
