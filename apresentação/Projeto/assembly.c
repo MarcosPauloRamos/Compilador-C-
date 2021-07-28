@@ -427,35 +427,35 @@ void inserirInstrucao (QuadList l) {
 }
 
 void criarInstrucao (QuadList head) {
-    QuadList l = head;
-    inserirInstrucao(l);
-    AssemblyCode a = codehead;
-    while (a != NULL) {
-        if (a->kind == instr) {
-            switch(a->line.instruction.opcode){ // Atualiza labels de desvios
+    QuadList lista = head;
+    inserirInstrucao(lista);
+    AssemblyCode aux = codehead;
+    while (aux != NULL) {
+        if (aux->kind == instr) {
+            switch(aux->line.instruction.opcode){ // Atualiza labels de desvios
             case jmp:
-                a->line.instruction.imed = getLabelLine(a->line.instruction.label);
+                aux->line.instruction.imed = getLabelLine(aux->line.instruction.label);
                 break;
             case bne:
-                a->line.instruction.imed = getLabelLine(a->line.instruction.label);
+                aux->line.instruction.imed = getLabelLine(aux->line.instruction.label);
                 break;
             case beq:
-                a->line.instruction.imed = getLabelLine(a->line.instruction.label);
+                aux->line.instruction.imed = getLabelLine(aux->line.instruction.label);
                 break;
             case blt:
-                a->line.instruction.imed = getLabelLine(a->line.instruction.label);
+                aux->line.instruction.imed = getLabelLine(aux->line.instruction.label);
                 break;
             case bgt:
-                a->line.instruction.imed = getLabelLine(a->line.instruction.label);
+                aux->line.instruction.imed = getLabelLine(aux->line.instruction.label);
                 break;
             case jal:
-                a->line.instruction.imed = getLabelLine(a->line.instruction.label);
+                aux->line.instruction.imed = getLabelLine(aux->line.instruction.label);
                 break;
             default:
                 break;
             }
         }
-        a = a->next;
+        aux = aux->next;
     }
 }
 
