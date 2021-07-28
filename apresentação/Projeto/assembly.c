@@ -86,48 +86,48 @@ VarKind checkType (QuadList l) {
 }
 
 void insertLabel (char * label) {
-    AssemblyCode new = (AssemblyCode) malloc(sizeof(struct AssemblyCodeRec));
-    new->lineno = line;
-    new->kind = lbl;
-    new->line.label = (char *) malloc(strlen(label) * sizeof(char));
-    strcpy(new->line.label, label);
-    new->next = NULL;
+    AssemblyCode inserido = (AssemblyCode) malloc(sizeof(struct AssemblyCodeRec));
+    inserido->lineno = line;
+    inserido->kind = lbl;
+    inserido->line.label = (char *) malloc(strlen(label) * sizeof(char));
+    strcpy(inserido->line.label, label);
+    inserido->next = NULL;
     if (codehead == NULL) {
-        codehead = new;
+        codehead = inserido;
     }
     else {
-        AssemblyCode a = codehead;
-        while (a->next != NULL) a = a->next;
-        a->next = new;
+        AssemblyCode aux = codehead;
+        while (aux->next != NULL) aux = aux->next;
+        aux->next = inserido;
     }
 }
 
 void formatogeral (InstrFormat format, InstrKind opcode, Reg reg1, Reg reg2, Reg reg3, int imed, char * label) {
-    Instruction i;
+    Instruction instrucao;
     switch_SO++;
     if(opcode == ctso) switch_SO = 0;
-    i.format = format;
-    i.opcode = opcode;
-    i.reg1 = reg1;
-    i.reg2 = reg2;
-    i.reg3 = reg3;
-    i.imed = imed;
+    instrucao.format = format;
+    instrucao.opcode = opcode;
+    instrucao.reg1 = reg1;
+    instrucao.reg2 = reg2;
+    instrucao.reg3 = reg3;
+    instrucao.imed = imed;
     if (label != NULL) {
-        i.label = (char *) malloc(strlen(label) * sizeof(char));
-        strcpy(i.label, label);
+        instrucao.label = (char *) malloc(strlen(label) * sizeof(char));
+        strcpy(instrucao.label, label);
     }
-    AssemblyCode new = (AssemblyCode) malloc(sizeof(struct AssemblyCodeRec));
-    new->lineno = line;
-    new->kind = instr;
-    new->line.instruction = i;
-    new->next = NULL;
+    AssemblyCode inserido = (AssemblyCode) malloc(sizeof(struct AssemblyCodeRec));
+    inserido->lineno = line;
+    inserido->kind = instr;
+    inserido->line.instruction = instrucao;
+    inserido->next = NULL;
     if (codehead == NULL) {
-        codehead = new;
+        codehead = inserido;
     }
     else {
-        AssemblyCode a = codehead;
-        while (a->next != NULL) a = a->next;
-        a->next = new;
+        AssemblyCode aux = codehead;
+        while (aux->next != NULL) aux = aux->next;
+        aux->next = inserido;
     }
     line ++;
 }
@@ -164,33 +164,33 @@ Reg getReg (char * regName) {
 }
 
 int getLabelLine (char * label) {
-    AssemblyCode a = codehead;
-    while (a->next != NULL) {
-        if (a->kind == lbl && strcmp(a->line.label, label) == 0) return a->lineno;
-        a = a->next;
+    AssemblyCode aux = codehead;
+    while (aux->next != NULL) {
+        if (aux->kind == lbl && strcmp(aux->line.label, label) == 0) return aux->lineno;
+        aux = aux->next;
     }
     return -1;
 }
 
 VarKind getVarKind (char * id, char * scope) {
-    FunList f = funlisthead;
-    while (f != NULL && strcmp(f->id, scope) != 0) f = f->next;
-    if (f == NULL) {
+    FunList funcao = funlisthead;
+    while (funcao != NULL && strcmp(funcao->id, scope) != 0) funcao = funcao->next;
+    if (funcao == NULL) {
         return simple;
     }
-    VarList v = f->vars;
-    while (v != NULL) {
-        if (strcmp(v->id, id) == 0) return v->kind;
-        v = v->next;
+    VarList variavel = funcao->vars;
+    while (variavel != NULL) {
+        if (strcmp(variavel->id, id) == 0) return variavel->kind;
+        variavel = variavel->next;
     }
     return simple;
 }
 
 int getFunSize (char * id) {
-    FunList f = funlisthead;
-    while (f != NULL && strcmp(f->id, id) != 0) f = f->next;
-    if (f == NULL) return -1;
-    return f->size;
+    FunList funcao = funlisthead;
+    while (funcao != NULL && strcmp(funcao->id, id) != 0) funcao = funcao->next;
+    if (funcao == NULL) return -1;
+    return funcao->size;
 }
 
 void initCode (QuadList head) {
