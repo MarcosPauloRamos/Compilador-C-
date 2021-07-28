@@ -23,7 +23,7 @@ int narg = 0;
 int jmpmain = 0;
 int switch_SO = 0;
 
-void insertFun (char * id) {
+void Funcao (char * id) {
     FunList new = (FunList) malloc(sizeof(struct FunListRec));
     new->id = (char *) malloc(strlen(id) * sizeof(char));
     strcpy(new->id, id);
@@ -50,7 +50,7 @@ void insertVar (char * scope, char * id, int size, VarKind kind) {
     }
     while (f != NULL && strcmp(f->id, scope) != 0)  f = f->next;
       if (f == NULL) {
-        insertFun(scope);
+        Funcao(scope);
         f = funlisthead;
         while (f != NULL && strcmp(f->id, scope) != 0 ) 
         f = f->next;
@@ -195,7 +195,7 @@ int getFunSize (char * id) {
 
 void initCode (QuadList head) {
     imediato(addi,$lp,$zero,lploc,NULL);
-    insertFun("global");
+    Funcao("global");
 }
 
 void inserirInstrucao (QuadList l) {
@@ -355,7 +355,7 @@ void inserirInstrucao (QuadList l) {
                     jmpmain = 1;
                 }
                 insertLabel(a1.contents.var.name);
-                insertFun(a1.contents.var.name);
+                Funcao(a1.contents.var.name);
                 curarg = 0;
                 break;
             
