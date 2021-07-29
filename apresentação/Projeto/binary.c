@@ -53,7 +53,7 @@ void assembly_binary(AssemblyCode codeLine){
             fprintf(listing,"ram[%d] = {6'b%s, 5'b%s, 5'b%s, 5'b%s, 5'b%s, 6'b%s};",codeLine->lineno,
                                                              opcodeBins[inst.opcode],
                                                              r2,
-                                                             rg3,
+                                                             r3,
                                                              r1,
                                                              ri,
                                                              functBins[inst.opcode]);
